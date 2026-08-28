@@ -7,12 +7,11 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.enums import ChatType
 from aiogram.filters import Command, CommandStart
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-from aiohttp import web
 
 # ===== ТОКЕН =====
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 if not TOKEN:
-    raise ValueError("❌ Добавь TELEGRAM_TOKEN в Environment Variables!")
+    raise ValueError("❌ Добавь TELEGRAM_TOKEN в Variables!")
 
 # ===== НАСТРОЙКИ =====
 ADMIN_ID = 7921434166
@@ -26,7 +25,7 @@ CHAT_THREADS = {
 
 MODERATORS = {ADMIN_ID}
 PENDING_REPORTS = {}
-PENDING_CONFIRMATIONS = {}  # 👈 НОВОЕ: для подтверждения отправки
+PENDING_CONFIRMATIONS = {}
 SELECTED_THREADS = {ADMIN_ID: DEFAULT_THREAD_ID}
 
 # ===== ТРИГГЕРЫ =====
@@ -111,7 +110,7 @@ def get_thread_keyboard() -> InlineKeyboardMarkup:
         ])
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
-def get_confirm_keyboard() -> InlineKeyboardMarkup:  # 👈 НОВОЕ
+def get_confirm_keyboard() -> InlineKeyboardMarkup:
     buttons = [
         [
             InlineKeyboardButton(text="✅ Да, отправить", callback_data="confirm_send"),
@@ -152,16 +151,16 @@ async def send_report_to_moderators(message: types.Message, trigger_word: str):
                 reply_markup=get_moderator_keyboard(report_id)
             )
         except Exception as e:
-            logging.error(f"( `ε´ )Ошибка отправки модератору {moderator_id}: {e}")
+            logging.error(f"Ошибка отправки модератору {moderator_id}: {e}")
 
 # ===== КОМАНДЫ =====
 @dp.message(CommandStart())
 async def start_command(message: types.Message):
     if message.from_user.id == ADMIN_ID:
         await message.answer(
-            "(ー_ー ) Агата на связи.\n\n"
+            "🐱 Агата на связи.\n\n"
             "Команды:\n"
-            "/add_moderator - выдать ордер модератора\n"
+            "/add_moderator - добавить модератора\n"
             "/remove_moderator - уволить модератора\n"
             "/list_moderators - список модераторов\n"
             "/stats - статистика\n"
@@ -169,12 +168,12 @@ async def start_command(message: types.Message):
             "Просто напиши текст → я спрошу подтверждение → отправлю в группу."
         )
     else:
-        await message.answer("Доступ запрещен Σ(▼□▼メ)")
+        await message.answer("Доступ запрещен.")
 
 @dp.message(Command("threads"))
 async def cmd_threads(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Только админам. Σ(▼□▼メ)")
+        await message.answer("Только админ.")
         return
     await message.answer(
         "Выберите тему:",
@@ -184,7 +183,7 @@ async def cmd_threads(message: types.Message):
 @dp.message(Command("add_moderator"))
 async def cmd_add_moderator(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Только админам. Σ(▼□▼メ)")
+        await message.answer("Только админ.")
         return
     if message.reply_to_message:
         new_moderator_id = message.reply_to_message.from_user.id
@@ -198,10 +197,10 @@ async def cmd_add_moderator(message: types.Message):
             new_moderator_id = int(parts[1])
             new_moderator_name = f"User {new_moderator_id}"
         except ValueError:
-            await message.answer("...Это не ID.")
+            await message.answer("Это не ID.")
             return
     MODERATORS.add(new_moderator_id)
-    await message.answer(f"✅ {new_moderator_name} получил(а) ордер, теперь модератор.")
+    await message.answer(f"✅ {new_moderator_name} теперь модератор.")
 
 @dp.message(Command("remove_moderator"))
 async def cmd_remove_moderator(message: types.Message):
@@ -218,14 +217,14 @@ async def cmd_remove_moderator(message: types.Message):
             MODERATORS.remove(moderator_id)
             await message.answer(f"❌ Модератор {moderator_id} уволен.")
         else:
-            await message.answer("(-_-;)Такого модератора нет.")
+            await message.answer("Такого модератора нет.")
     except ValueError:
         await message.answer("Это не ID.")
 
 @dp.message(Command("list_moderators"))
 async def cmd_list_moderators(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Только админам. Σ(▼□▼メ)")
+        await message.answer("Только админ.")
         return
     moderators_list = "\n".join([f"• {mod_id}" for mod_id in MODERATORS])
     await message.answer(f"Модераторы:\n{moderators_list}")
@@ -233,7 +232,7 @@ async def cmd_list_moderators(message: types.Message):
 @dp.message(Command("stats"))
 async def cmd_stats(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Только админам. Σ(▼□▼メ)")
+        await message.answer("Только админ.")
         return
     await message.answer(
         f"📊 Статистика:\n"
@@ -246,7 +245,7 @@ async def cmd_stats(message: types.Message):
 @dp.callback_query(lambda c: c.data.startswith('thread_'))
 async def process_thread_selection(callback_query: CallbackQuery):
     if callback_query.from_user.id != ADMIN_ID:
-        await callback_query.answer("Только админам. Σ(▼□▼メ)")
+        await callback_query.answer("Только админ.")
         return
     thread_id = int(callback_query.data.split('_')[1])
     SELECTED_THREADS[callback_query.from_user.id] = thread_id
@@ -329,7 +328,7 @@ async def process_callback(callback_query: CallbackQuery):
         logging.error(f"Ошибка: {e}")
         await callback_query.answer(f"Ошибка: {e}")
 
-# ===== ПОДТВЕРЖДЕНИЕ ОТПРАВКИ (НОВОЕ) =====
+# ===== ПОДТВЕРЖДЕНИЕ ОТПРАВКИ =====
 @dp.callback_query(lambda c: c.data in ['confirm_send', 'cancel_send'])
 async def process_confirm(callback_query: CallbackQuery):
     user_id = callback_query.from_user.id
@@ -367,7 +366,7 @@ async def process_confirm(callback_query: CallbackQuery):
         await callback_query.answer("Отменено")
         del PENDING_CONFIRMATIONS[user_id]
 
-# ===== ЛИЧНЫЕ СООБЩЕНИЯ (С ПОДТВЕРЖДЕНИЕМ) =====
+# ===== ЛИЧНЫЕ СООБЩЕНИЯ =====
 @dp.message(F.chat.type == ChatType.PRIVATE)
 async def handle_private_messages(message: types.Message):
     if message.from_user.id != ADMIN_ID:
@@ -405,24 +404,10 @@ async def check_messages(message: types.Message):
         logging.info(f"Триггер '{trigger_found}' от {message.from_user.username}")
         await send_report_to_moderators(message, trigger_found)
 
-# ===== ЗАПУСК =====
-async def health_check(request):
-    return web.Response(text="Г(`Д´) Агата на посту!")
-
-def main():
-    PORT = int(os.getenv("PORT", 8080))
-    app = web.Application()
-    app.router.add_get("/", health_check)
-    app.router.add_get("/health", health_check)
-    
-    async def start_polling():
-        await bot.delete_webhook()
-        await dp.start_polling(bot)
-    
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.create_task(start_polling())
-    web.run_app(app, host="0.0.0.0", port=PORT)
+# ===== ЗАПУСК (ПРОСТОЙ ДЛЯ RAILWAY) =====
+async def main():
+    print("✅ Агата запускается на Railway...")
+    await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main()) 
