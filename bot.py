@@ -31,7 +31,7 @@ SELECTED_THREADS = {ADMIN_ID: DEFAULT_THREAD_ID}
 
 # ===== ТРИГГЕРЫ =====
 TRIGGER_ROOTS = [
-    "педофил", "педофили", "педоф", "педик", "педовк",
+    "педофил", "педофили", "педоф", "педовк",
     "pdo", "pedofil", "pedof", "ped0", "p3do",
     "секс", "sex", "с3кс", "секc",
     "наркот", "наркоман", "травк", "гашиш", "ширк", "ширев",
@@ -44,7 +44,7 @@ TRIGGER_ROOTS = [
 ]
 
 EXACT_TRIGGERS = [
-    "смерть", "сдохни", "сдохнуть", "издохни",
+    "смерть", "сдохни", "сдохнуть", "здохни",
     "трах", "трахать", "трахаться", "трахнуть",
     "ебля", "ебать", "ебал", "ебут", "ебли",
     "дроч", "отсос", "минет",
@@ -134,9 +134,9 @@ async def send_report_to_moderators(message: types.Message, trigger_word: str):
     }
     
     report_text = (
-        f"🚨 Агата на посту! Обнаружено нарушение!\n\n"
+        f"🚨 Обнаружено запрещенное слово!\n\n"
         f"📍 Чат: {message.chat.title}\n"
-        f"👤 Нарушитель: {message.from_user.full_name}"
+        f"👤 Отправитель: {message.from_user.full_name}"
         f" (@{message.from_user.username or 'нет username'})\n"
         f"🆔 ID: {message.from_user.id}\n"
         f"⚠️ Триггер: {trigger_word}\n"
@@ -152,16 +152,16 @@ async def send_report_to_moderators(message: types.Message, trigger_word: str):
                 reply_markup=get_moderator_keyboard(report_id)
             )
         except Exception as e:
-            logging.error(f"Ошибка отправки модератору {moderator_id}: {e}")
+            logging.error(f"( `ε´ )Ошибка отправки модератору {moderator_id}: {e}")
 
 # ===== КОМАНДЫ =====
 @dp.message(CommandStart())
 async def start_command(message: types.Message):
     if message.from_user.id == ADMIN_ID:
         await message.answer(
-            "🐱 Агата на связи.\n\n"
+            "(ー_ー ) Агата на связи.\n\n"
             "Команды:\n"
-            "/add_moderator - добавить модератора\n"
+            "/add_moderator - выдать ордер модератора\n"
             "/remove_moderator - уволить модератора\n"
             "/list_moderators - список модераторов\n"
             "/stats - статистика\n"
@@ -169,12 +169,12 @@ async def start_command(message: types.Message):
             "Просто напиши текст → я спрошу подтверждение → отправлю в группу."
         )
     else:
-        await message.answer("Доступ запрещен.")
+        await message.answer("Доступ запрещен Σ(▼□▼メ)")
 
 @dp.message(Command("threads"))
 async def cmd_threads(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Только админ.")
+        await message.answer("Только админам. Σ(▼□▼メ)")
         return
     await message.answer(
         "Выберите тему:",
@@ -184,7 +184,7 @@ async def cmd_threads(message: types.Message):
 @dp.message(Command("add_moderator"))
 async def cmd_add_moderator(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Только админ.")
+        await message.answer("Только админам. Σ(▼□▼メ)")
         return
     if message.reply_to_message:
         new_moderator_id = message.reply_to_message.from_user.id
@@ -198,10 +198,10 @@ async def cmd_add_moderator(message: types.Message):
             new_moderator_id = int(parts[1])
             new_moderator_name = f"User {new_moderator_id}"
         except ValueError:
-            await message.answer("Это не ID.")
+            await message.answer("...Это не ID.")
             return
     MODERATORS.add(new_moderator_id)
-    await message.answer(f"✅ {new_moderator_name} теперь модератор.")
+    await message.answer(f"✅ {new_moderator_name} получил(а) ордер, теперь модератор.")
 
 @dp.message(Command("remove_moderator"))
 async def cmd_remove_moderator(message: types.Message):
@@ -218,14 +218,14 @@ async def cmd_remove_moderator(message: types.Message):
             MODERATORS.remove(moderator_id)
             await message.answer(f"❌ Модератор {moderator_id} уволен.")
         else:
-            await message.answer("Такого модератора нет.")
+            await message.answer("(-_-;)Такого модератора нет.")
     except ValueError:
         await message.answer("Это не ID.")
 
 @dp.message(Command("list_moderators"))
 async def cmd_list_moderators(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Только админ.")
+        await message.answer("Только админам. Σ(▼□▼メ)")
         return
     moderators_list = "\n".join([f"• {mod_id}" for mod_id in MODERATORS])
     await message.answer(f"Модераторы:\n{moderators_list}")
@@ -233,7 +233,7 @@ async def cmd_list_moderators(message: types.Message):
 @dp.message(Command("stats"))
 async def cmd_stats(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Только админ.")
+        await message.answer("Только админам. Σ(▼□▼メ)")
         return
     await message.answer(
         f"📊 Статистика:\n"
@@ -246,7 +246,7 @@ async def cmd_stats(message: types.Message):
 @dp.callback_query(lambda c: c.data.startswith('thread_'))
 async def process_thread_selection(callback_query: CallbackQuery):
     if callback_query.from_user.id != ADMIN_ID:
-        await callback_query.answer("Только админ.")
+        await callback_query.answer("Только админам. Σ(▼□▼メ)")
         return
     thread_id = int(callback_query.data.split('_')[1])
     SELECTED_THREADS[callback_query.from_user.id] = thread_id
@@ -407,7 +407,7 @@ async def check_messages(message: types.Message):
 
 # ===== ЗАПУСК =====
 async def health_check(request):
-    return web.Response(text="🐱 Агата на посту!")
+    return web.Response(text="Г(`Д´) Агата на посту!")
 
 def main():
     PORT = int(os.getenv("PORT", 8080))
