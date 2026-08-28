@@ -404,10 +404,10 @@ async def check_messages(message: types.Message):
         logging.info(f"Триггер '{trigger_found}' от {message.from_user.username}")
         await send_report_to_moderators(message, trigger_found)
 
-# ===== ЗАПУСК (ПРОСТОЙ ДЛЯ RAILWAY) =====
+# ===== ЗАПУСК =====
 async def main():
     print("✅ Агата запускается на Railway...")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())
