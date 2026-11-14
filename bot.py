@@ -28,23 +28,122 @@ PENDING_REPORTS = {}
 PENDING_CONFIRMATIONS = {}
 SELECTED_THREADS = {ADMIN_ID: DEFAULT_THREAD_ID}
 
-# ===== ТРИГГЕРЫ (впиши свои слова вместо "---") =====
+# ===== ТРИГГЕРЫ: СЕКСУАЛЬНЫЙ ПОДТЕКСТ И ДОМОГАТЕЛЬСТВА =====
 TRIGGER_ROOTS = [
-    "---",
-    "---",
+    "пизд", "залуп", "муда", "манд", "пидор", "пидар", "пидорас",
+    "гандон", "гондон", "ебал", "ебат", "ебут", "ебёт", "ебет",
+    "уёб", "уеб", "долбоёб", "долбоеб", "хуесос", "хуёсос",
+    "минет", "анальн", "сексуальн", "изнасил", "домогат",
+    "трахн", "траха", "трахну", "выеб", "выебал", "отсос", "отсоси",
+    "сперм", "член", "пенис", "вагин", "клитор", "анус", "оргазм", "эякул",
+    "rape", "raping", "rapist", "sexual", "sexually",
+    "harass", "harassment", "molest", "molesting",
+    "pedo", "paedo", "pedophile", "incest",
+    "dick pic", "dickpic", "nudes", "nude", "onlyfans",
+    "blowjob", "handjob", "cum", "cumming", "orgasm",
+    "penis", "vagina", "clitoris", "anus", "porn", "porno",
 ]
 
 EXACT_TRIGGERS = [
-    "---",
-    "---",
+    "пизда", "пизды", "пизду", "пиздой", "пизде",
+    "хуй", "хуя", "хую", "хуём", "хуем",
+    "секс", "секса", "сексу", "сексом", "интим", "интима",
+    "голая", "голый", "голые", "раздевайся", "раздевай",
+    "порно", "порнуха", "порносайт", "миньет", "минет",
+    "оральный", "орально", "вагинальный", "анальный",
+    "fuck", "fucking", "fucked", "fucker", "fuckers",
+    "shit", "bitch", "bitches", "asshole", "assholes",
+    "cunt", "cunts", "bastard", "whore", "whores",
+    "slut", "sluts", "pussy", "pussies",
+    "cock", "cocks", "cocksucker",
+    "motherfucker", "nigga", "nigger",
+    "faggot", "fag", "retard", "twat", "wanker", "bollocks",
 ]
 
+CONTEXT_TRIGGERS = {
+    "член": ["сексуальн", "большой", "маленький", "сосать", "отсос", "покажи", "фото", "фотку", "скинь"],
+    "грудь": ["покажи", "фото", "фотку", "скинь", "сосать", "лизать", "большая", "маленькая"],
+    "попка": ["покажи", "фото", "фотку", "скинь", "лизать", "сексуальн"],
+    "сиськи": ["покажи", "фото", "фотку", "скинь", "лизать", "сосать"],
+    "жопа": ["покажи", "фото", "фотку", "скинь", "лизать", "сексуальн"],
+}
+
+# ===== ТРИГГЕРЫ: ТРАНСФОБИЯ / ГОМОФОБИЯ / ДИСФОРИЯ =====
+ATTENTION_TRIGGERS = [
+    "педик", "педераст", "педираст", "гомосек", "гомофоб",
+    "трансфоб", "трансофоб", "трансфобия",
+    "дисфория", "дисфорик", "дисфоричка",
+    "транс-идентифицир", "тиф", "тим",
+    "гендерно-критическ", "гендерный критик",
+    "настоящая женщина", "биологическая женщина",
+    "настоящий мужчина", "биологический мужчина",
+    "мужчина в платье", "мужик в юбке",
+    "недочеловек",
+    "сменить пол", "смена пола", "поломенял",
+    "трансня", "трансуха",
+    "лгбт-пропаганд", "пропаганд гомосексуал",
+    "содомит", "содомия",
+    "мужеложец", "мужеложник",
+    "tranny", "troon", "shemale", "ladyboy",
+    "terf", "twerf", "gender critical", "gender ideolog",
+    "transvestigat", "transvestigation",
+    "rapid onset gender dysphoria", "rogd",
+    "drop the t", "lgb drop", "lgb alliance",
+    "super straight", "superstraight", "super gay",
+    "adult human female",
+    "trans-identified", "tim", "tif",
+    "autogynephilia", "autogynephile",
+    "dysphoric female", "dysphoric woman",
+    "biological male", "biological female",
+    "groomer", "grooming",
+    "trans agenda", "trans cult", "gender cult",
+]
+
+CONTEXT_TRIGGERS_DYS = {
+    "дисфори": ["притворя", "выдума", "не существует", "фейк", "избавиться", "избави"],
+    "dysphoria": ["fake", "not real", "made up", "get over", "rid of"],
+}
+
+# ===== ТРИГГЕРЫ МЕДИКАЛИЗМА (ТОЛЬКО ПРЯМЫЕ ОСКОРБЛЕНИЯ) =====
+# Убрано всё, что связано с "болезнью", "лечить", "исправить", "вылечиться" —
+# в вашем чате это нормально.
+MEDICALISM_TRIGGERS = [
+    "психически больн", "психически нездоров", "психбольн",
+    "больной на голову", "больная на голову",
+    "шизофреник", "шизофреничка", "шиза",
+    "псих", "психичка", "психопат",
+    "дебил", "дебилка", "дебильн",
+    "умственно отстал", "олигофрен",
+    "недоразвит", "недоразвитость",
+    "пей таблетки", "прими таблетки", "таблеточки",
+    "в дурку", "в психушку", "в психбольницу",
+    "конверсионная терапия", "конверсионн",
+    "mentally ill", "mental illness", "psycho", "psychotic",
+    "schizo", "schizophrenic",
+    "take your meds", "take meds", "take pills",
+    "conversion therapy",
+    "brainwashed", "brainwashing",
+    "delusional", "delusion", "delusions",
+]
+
+CONTEXT_TRIGGERS_MED = {
+    "расстройство": ["психик", "личности", "поведения", "у тебя", "у него", "у нее", "у них"],
+    "диагноз": ["у тебя", "у него", "у нее", "у них", "постав"],
+    "отклонение": ["психик", "поведения", "в развитии", "у тебя", "у него", "у нее"],
+    "болезнь": ["психическ", "душевн", "у тебя", "у него", "у нее"],
+    "disorder": ["mental", "personality", "behavioral", "you have", "he has", "she has"],
+    "illness": ["mental", "you have", "he has", "she has"],
+    "disease": ["mental", "you have", "he has", "she has"],
+}
+
+# ===== НОРМАЛИЗАЦИЯ =====
 CHAR_REPLACEMENTS = {
-    '@': 'а', 'ф': 'а', '0': 'о', '3': 'е',
-    '1': 'и', '|': 'и', '$': 'с', 'c': 'с',
+    '@': 'а', '0': 'о', '3': 'е',
+    '1': 'и', '|': 'и', '$': 'с',
     '4': 'ч', '6': 'б', '8': 'в', '9': 'д',
-    'p': 'р', 'x': 'х', 'y': 'у', 'k': 'к',
-    'm': 'м', 'n': 'н', 't': 'т',
+    'a': 'а', 'c': 'с', 'e': 'е', 'k': 'к', 'm': 'м',
+    'o': 'о', 'p': 'р', 't': 'т', 'x': 'х', 'y': 'у',
+    'b': 'в', 'h': 'н',
 }
 
 logging.basicConfig(level=logging.INFO)
@@ -56,22 +155,54 @@ dp = Dispatcher()
 # ===== ФУНКЦИИ =====
 def normalize_text(text: str) -> str:
     text = text.lower()
+    text = re.sub(r'[\u200b-\u200f\u202a-\u202e\u2060\ufeff\u00a0\u3000]', '', text)
     for char, replacement in CHAR_REPLACEMENTS.items():
         text = text.replace(char, replacement)
     text = re.sub(r'(.)\1{2,}', r'\1\1', text)
-    text = re.sub(r'[\s\.,;:!?\(\)\[\]\{\}]+', '', text)
+    text = re.sub(r'[\s\.,;:!?\(\)\[\]\{\}\-\_\*]+', '', text)
     return text
 
 
 def check_triggers(text: str):
+    """Возвращает (тип, триггер) или (None, None).
+    Тип: 'sexual' — полный рапорт, 'attention' — мягкое уведомление.
+    """
     normalized_text = normalize_text(text)
+
+    # 1. Сексуальные триггеры (приоритет)
     for word in EXACT_TRIGGERS:
-        if word != "---" and word in normalized_text:
-            return word
+        if word in normalized_text:
+            return ('sexual', word)
     for root in TRIGGER_ROOTS:
-        if root != "---" and root in normalized_text:
-            return root
-    return None
+        if root in normalized_text:
+            return ('sexual', root)
+    for word, contexts in CONTEXT_TRIGGERS.items():
+        if word in normalized_text:
+            for ctx in contexts:
+                if ctx in normalized_text:
+                    return ('sexual', f"{word} + {ctx}")
+
+    # 2. Трансфобия / гомофобия / дисфория
+    for word in ATTENTION_TRIGGERS:
+        if word in normalized_text:
+            return ('attention', word)
+    for word, contexts in CONTEXT_TRIGGERS_DYS.items():
+        if word in normalized_text:
+            for ctx in contexts:
+                if ctx in normalized_text:
+                    return ('attention', f"{word} + {ctx}")
+
+    # 3. Медикализм (тоже "стоит обратить внимание")
+    for word in MEDICALISM_TRIGGERS:
+        if word in normalized_text:
+            return ('attention', f"медикализм: {word}")
+    for word, contexts in CONTEXT_TRIGGERS_MED.items():
+        if word in normalized_text:
+            for ctx in contexts:
+                if ctx in normalized_text:
+                    return ('attention', f"медикализм: {word} + {ctx}")
+
+    return (None, None)
 
 
 def get_moderator_keyboard(report_id: int) -> InlineKeyboardMarkup:
@@ -112,7 +243,7 @@ def get_confirm_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-async def send_report_to_moderators(message: types.Message, trigger_word: str):
+async def send_report_to_moderators(message: types.Message, trigger_type: str, trigger_word: str):
     report_id = message.message_id
     chat_title = message.chat.title or "Комментарии канала"
     msg_link = message.get_url() or "ссылка недоступна"
@@ -125,19 +256,34 @@ async def send_report_to_moderators(message: types.Message, trigger_word: str):
         'username': message.from_user.username or 'отсутствует',
         'text': message.text,
         'trigger': trigger_word,
+        'trigger_type': trigger_type,
         'timestamp': datetime.now()
     }
 
-    report_text = (
-        f"Рапорт о нарушении порядка. (=｀ω´=)\n\n"
-        f"Участок: {chat_title}\n"
-        f"Подозреваемый: {message.from_user.full_name} (@{message.from_user.username or 'без тега'})\n"
-        f"ID: {message.from_user.id}\n"
-        f"Триггер: {trigger_word}\n"
-        f"Текст: {message.text[:500]}\n"
-        f"Материалы дела: {msg_link}\n\n"
-        f"Я взяла его на карандаш, но самовольно мешать вам не стану. Жду вашего решения, товарищ командир."
-    )
+    if trigger_type == 'sexual':
+        header = "Рапорт о нарушении порядка."
+        body = (
+            f"Участок: {chat_title}\n"
+            f"Подозреваемый: {message.from_user.full_name} (@{message.from_user.username or 'без тега'})\n"
+            f"ID: {message.from_user.id}\n"
+            f"Триггер: {trigger_word}\n"
+            f"Текст: {message.text[:500]}\n"
+            f"Материалы дела: {msg_link}\n\n"
+            f"Я взяла его на карандаш, но самовольно мешать вам не стану. Жду вашего решения, товарищ командир."
+        )
+    else:  # attention
+        header = "Стоит обратить внимание."
+        body = (
+            f"Участок: {chat_title}\n"
+            f"Подозреваемый: {message.from_user.full_name} (@{message.from_user.username or 'без тега'})\n"
+            f"ID: {message.from_user.id}\n"
+            f"Метка: {trigger_word}\n"
+            f"Текст: {message.text[:500]}\n"
+            f"Материалы дела: {msg_link}\n\n"
+            f"Возможно, нарушение. Я отметила, но решение за вами, товарищ командир."
+        )
+
+    report_text = f"{header}\n\n{body}"
 
     for moderator_id in MODERATORS:
         try:
@@ -155,7 +301,7 @@ async def send_report_to_moderators(message: types.Message, trigger_word: str):
 async def start_command(message: types.Message):
     if message.from_user.id == ADMIN_ID:
         await message.answer(
-            "Офицер Агата на посту. (=｀ω´=)\n"
+            "Офицер Агата на посту.\n"
             "Не думайте, что я ждала именно вашего сообщения, просто проверяю связь.\n\n"
             "Служебный регламент:\n"
             "/order - выписать ордер на аресты (ответом на сообщение в группе)\n"
@@ -167,27 +313,27 @@ async def start_command(message: types.Message):
             "Если нужно передать сообщение в группу — просто напишите его сюда. Я проверю и отправлю, чтобы вы не наделали глупостей."
         )
     else:
-        await message.answer("Отставить. Посторонним вход в штаб строго воспрещен. (=｀ω´=)")
+        await message.answer("Отставить. Посторонним вход в штаб строго воспрещен.")
 
 
 @dp.message(Command("order"))
 async def cmd_give_order(message: types.Message):
     if message.chat.type not in [ChatType.GROUP, ChatType.SUPERGROUP]:
-        await message.reply("Ордер выписывается только на месте службы — в группе или комментариях. (=｀ω´=)")
+        await message.reply("Ордер выписывается только на месте службы — в группе или комментариях.")
         return
 
     member = await bot.get_chat_member(message.chat.id, message.from_user.id)
     if message.from_user.id != ADMIN_ID and member.status not in ["administrator", "creator"]:
-        await message.reply("Не по чину. Доступ к архиву ордеров есть только у старшего состава. (=｀ω´=)")
+        await message.reply("Не по чину. Доступ к архиву ордеров есть только у старшего состава.")
         return
 
     if not message.reply_to_message:
-        await message.reply("Укажите цель. Ответьте этой командой на сообщение того, кому нужно выписать ордер на аресты. (=｀ω´=)")
+        await message.reply("Укажите цель. Ответьте этой командой на сообщение того, кому нужно выписать ордер на аресты.")
         return
 
     target_user = message.reply_to_message.from_user
     if target_user.is_bot:
-        await message.reply("Ботам полномочия ни к чему. Я сама справлюсь с патрулированием. (=｀ω´=)")
+        await message.reply("Ботам полномочия ни к чему. Я сама справлюсь с патрулированием.")
         return
 
     try:
@@ -199,13 +345,13 @@ async def cmd_give_order(message: types.Message):
         )
         MODERATORS.add(target_user.id)
         await message.reply(
-            f"Ордер на аресты оформлен по всей форме. (=｀ω´=)\n"
+            f"Ордер на аресты оформлен по всей форме.\n"
             f"Сотрудник {target_user.full_name} наделяется правом задерживать нарушителей. "
             f"И не вздумайте злоупотреблять полномочиями, я за вами приглядываю."
         )
     except Exception as e:
         await message.reply(
-            f"Не удалось оформить документы. Проверьте, выданы ли мне права на назначение администраторов. (=｀ω´=)\n"
+            f"Не удалось оформить документы. Проверьте, выданы ли мне права на назначение администраторов.\n"
             f"Код сбоя: {e}"
         )
 
@@ -213,7 +359,7 @@ async def cmd_give_order(message: types.Message):
 @dp.message(Command("threads"))
 async def cmd_threads(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Отказано. Вы не уполномочены менять частоты связи. (=｀ω´=)")
+        await message.answer("Отказано. Вы не уполномочены менять частоты связи.")
         return
     await message.answer(
         "Выберите направление для отправки депеши:",
@@ -224,7 +370,7 @@ async def cmd_threads(message: types.Message):
 @dp.message(Command("add_moderator"))
 async def cmd_add_moderator(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Отказано. Кадровые вопросы решает только командование. (=｀ω´=)")
+        await message.answer("Отказано. Кадровые вопросы решает только командование.")
         return
     if message.reply_to_message:
         new_moderator_id = message.reply_to_message.from_user.id
@@ -238,11 +384,11 @@ async def cmd_add_moderator(message: types.Message):
             new_moderator_id = int(parts[1])
             new_moderator_name = f"Сотрудник {new_moderator_id}"
         except ValueError:
-            await message.answer("Неверный формат ID. Не тратьте мое время зря. (=｀ω´=)")
+            await message.answer("Неверный формат ID. Не тратьте мое время зря.")
             return
     MODERATORS.add(new_moderator_id)
     await message.answer(
-        f"Приказ подписан. {new_moderator_name} зачислен в штат модераторов. (=｀ω´=)\n"
+        f"Приказ подписан. {new_moderator_name} зачислен в штат модераторов.\n"
         f"Надеюсь, от него будет толк, а то мне одной за всем следить... то есть, работы много."
     )
 
@@ -250,7 +396,7 @@ async def cmd_add_moderator(message: types.Message):
 @dp.message(Command("remove_moderator"))
 async def cmd_remove_moderator(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Отказано. Не в вашей компетенции. (=｀ω´=)")
+        await message.answer("Отказано. Не в вашей компетенции.")
         return
     parts = message.text.split()
     if len(parts) < 2:
@@ -260,7 +406,7 @@ async def cmd_remove_moderator(message: types.Message):
         moderator_id = int(parts[1])
         if moderator_id in MODERATORS and moderator_id != ADMIN_ID:
             MODERATORS.remove(moderator_id)
-            await message.answer(f"Сотрудник {moderator_id} сдал жетон и отстранен от службы. (=｀ω´=)")
+            await message.answer(f"Сотрудник {moderator_id} сдал жетон и отстранен от службы.")
         else:
             await message.answer("В списках личного состава такого сотрудника нет.")
     except ValueError:
@@ -270,26 +416,27 @@ async def cmd_remove_moderator(message: types.Message):
 @dp.message(Command("list_moderators"))
 async def cmd_list_moderators(message: types.Message):
     if message.from_user.id != ADMIN_ID:
-        await message.answer("Засекреченная информация. (=｀ω´=)")
+        await message.answer("Засекреченная информация.")
         return
     moderators_list = "\n".join([f"- ID: {mod_id}" for mod_id in MODERATORS])
     await message.answer(f"Действующий состав патруля:\n{moderators_list}")
 
 
+@dp.message(F.text)
 async def check_messages(message: types.Message):
-if not message.text:
-return
-if message.from_user and message.from_user.id == ADMIN_ID:
-return
-trigger_found = check_triggers(message.text)
-if trigger_found:
-logging.info(f"Зафиксирован триггер '{trigger_found}' от {message.from_user.username}")
-await send_report_to_moderators(message, trigger_found)
+    if message.from_user and message.from_user.id == ADMIN_ID:
+        return
+    trigger_type, trigger_word = check_triggers(message.text)
+    if trigger_type:
+        logging.info(f"Зафиксирован триггер '{trigger_word}' ({trigger_type}) от {message.from_user.username}")
+        await send_report_to_moderators(message, trigger_type, trigger_word)
 
-===== ЗАПУСК =====
 
+# ===== ЗАПУСК =====
 async def main():
-print("Офицер Агата заступила на дежурство...")
-await dp.start_polling(bot)
-if name == "main":
-asyncio.run(main())
+    print("Офицер Агата заступила на дежурство...")
+    await dp.start_polling(bot)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
